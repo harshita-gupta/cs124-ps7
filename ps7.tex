@@ -86,8 +86,10 @@ Assuming that the values of C preceding it are correct, that is, that B(0) ... B
 
 The set of independent sets for k levels, $S(k)$ can be obtained by modifying a version of the independent sets for k - 1 levels, specifically by doing the following:\begin{enumerate}
 	\item Similar to the previous algorithms, we add all the new vertices added at step k to the independent sets of $S(k-2)$. Since, at this step, we are adding $2*{k-1}$ new vertices, all possible combinations of elements of the powerset of the new vertices can be added to each set in $S(k-2)$, yielding a $2^{2*{k-1}}\cdot S(k-2) = 4^{k-1}\cdot S(k-2)$ term.
-	\item For each of the independent sets in $S(k-1)$, we add the new vertices to sets that do not contain their parents. Since parent nodes will appear in 
+	\item For each of the independent sets in $S(k-1)$, we add the new vertices to sets that do not contain their parents. Since parent nodes will appear in $\frac{1}{2*{k-2}}$ of the sets, we add a term $\frac{2(k-2) - 1}{2({k-2})}S(k-1)$.
 	\end{enumerate}
+	Each of these terms can be represented as the ones in the recurrence provided by noting that the terms can also be defined recursively and by thinking about parents and children – the independent sets of a node's parents ($S(k-1)$) is combined with itself since there are two children coming from each parent, therefore the $B(k-1)^2$ term, and for the independent sets of a node's grandparents, the independent sets are combined with themselves in $2^2$ ways since their grandchildren are a factor of 4 more common. The inclusion of both the parents and grandparents is necessary because we want sets that both include and exclude, recursively, the root node. 
+	
 \subsubsection{Independent Sets on a Complete Binary Tree with 127 Nodes}
 
 I calculated the number of independent sets on a complete binary tree with 127 nodes using the following code in Mathematica:
@@ -169,7 +171,7 @@ We use this finding to now find a relationship between epsilon and $n$, or the o
 \begin{equation*}
 	2^{-\frac{1}{2n}} = \epsilon + 1
 \end{equation*}
-Which, using mathematica, gives the formula for n 
+Which, using Mathematica, gives the formula for n 
 \begin{equation*}
 	n = \frac{1}{2 \left(\frac{\log \left(-\frac{1}{-1-e}\right)}{\log (2)}+\frac{2 i \pi  c_1}{\log (2)}\right)},c_1\in \mathbb{Z}
 \end{equation*}
