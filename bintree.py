@@ -1,13 +1,13 @@
 def isChild(x, y):
-    x == 2 * y or x == 2 * y + 1
+    return x == 2 * y or x == 2 * y + 1
 
 
 def isParent(x, y):
-    isChild(y, x)
+    return isChild(y, x)
 
 
 def edgeexists(x, y):
-    isChild(x, y) or isParent(x, y)
+    return isChild(x, y) or isParent(x, y)
 
 
 # the above function in one statement
@@ -16,7 +16,7 @@ def list_powerset(lst):
                   lst, [[]])
 
 
-for trial in range(12):
+for trial in range(100):
     nodes = []
     for i in range(trial):
         nodes.append(i)

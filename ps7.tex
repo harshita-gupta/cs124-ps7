@@ -33,7 +33,14 @@ A recurrence starts to emerge, where IS(n) = IS(n-1) + IS(n-2), with base cases 
 
 Therefore, for n vertices in a line graph there are Fib(n + 1) independent sets.
 
+The proof that this formula succeeds is by induction. We know that the base case is true since IS(0) can have only one independent set, the empty set, and therefore is 1. IS(1)'s independent sets are the empty set as well as a set of the node itself. 
+
+Assuming that the values of IS preceding it are correct, that is, that IS(0) ... IS(k - 2), IS(k - 1) are all calculated correctly, the value of IS(k) can be derived as follows. 
+
+The set of independent sets for k vertices, $S(k)$ can be obtained by modifying a version of the independent sets for k - 1 vertices, namely by duplicating every set in $S(K - 1)$ that does not contain $v_{k-1}$ (since there is an edge between $v_k$ and $v_{k-1}$) and adding $v_k$ to one of the duplicates. Notice, however, that every set in $S(K-1)$ that does not contain $v_{k-1}$ is equivalent to every set in $S(K - 2)$. Therefore, instead of duplicating and modifying part of $S(K - 1)$, we simply add $S(K - 2)$ to $S(K - 1)$. IS(k) = IS(k-1) + IS(k-2) follows from this, therefore proving by induction that our family of values supplied is correct.
+
 \subsubsection{Cycle Graph}
+This is a modified version of the line graph, where the first and last vertices cannot be in the same set together. 
 Some small graphs: \\
 C(0) = 1\\
 C(1) = 1\\
@@ -50,10 +57,41 @@ $$ C  =
 	C(n - 1) + C(n - 2) & n > 2 
 \end{cases} 
 $$
+
+The proof for this formula also follows from induction. We know that the base case is true, since C(0) is the empty set = 1, and C(1) is also only the empty set since $v_1$ is connected to itself. C(2) is the empty set, as well as the sets containing each individual vertex = 3.
+
+Assuming that the values of C preceding it are correct, that is, that C(0) ... C(k - 2), C(k - 1) are all calculated correctly, the value of C(k) can be derived as follows. 
+
+The set of independent sets for k vertices, $S(k)$ can be obtained by modifying a version of the independent sets for k - 1 vertices, specifically by doing the following:\begin{enumerate}
+	\item duplicating every set in $S(K - 1)$ that does not contain $v_1$ or $v_{k-2}$ and adding $v_{k-1}$ to the duplicate, since $v_{k-1}$ is no longer connected to $v_1$.
+	\item duplicating every set in $S(K - 1)$ that does not contain $v_{k-1}$ (since there is an edge between $v_k$ and $v_{k-1}$) and adding $v_k$ to one of the duplicates
+	\item removing from the result of (2) above (the modified duplicates), every set that contains $v_1$, since the cyclical graph places an edge between $v_1$ and $v_k$.
+\end{enumerate}
+Notice, however, that every set in $S(K-1)$ that does not contain $v_{k-1}$ is equivalent to every set in $S(K - 2)$. And that the numerical effects of (1) and (3) reverse each other. Therefore, instead of duplicating and modifying part of $S(K - 1)$, we simply add $S(K - 2)$ to $S(K - 1)$. C(k) = C(k-1) + C(k-2) follows from this, therefore proving by induction that our family of values supplied is correct.
+
 \subsubsection{Complete Binary Tree}
+
+
+	B(n) = B(n-1)^2 + B(n-2)^4
+	B(0) = 1 
+	B(1) = 2
+
+The proof for this formula also follows from induction. We know that the base case is true, since C(0) is the empty set = 1, and C(1) is also only the empty set since $v_1$ is connected to itself. C(2) is the empty set, as well as the sets containing each individual vertex = 3.
+
+Assuming that the values of C preceding it are correct, that is, that C(0) ... C(k - 2), C(k - 1) are all calculated correctly, the value of C(k) can be derived as follows. 
+
+
+
 Add 1 for empty set. At each level $d$ of the binary tree (root is 0), there are $2^d$ nodes that can be combined in any combination (take a powerset) to achieve independent sets, since there are no vertices connecting them.
 Parents and children cannot be in the same set together, but all others can. For a given vertex $v$ at level $l$, depending on its level, we determine its number of siblings as $2^l - 1$, all of whom have children that can be included in a set with $v$. 
 Computing all the sets of a leaf: include or exclude itself from all the sets that came before it, doubling them, then also multiply by 2 for its sibling, and can't go in any set with its parents. 
+
+$$ B = 
+\begin{cases}
+	0 & n = 1, n = 2\\
+	{(B(n-2) + 1)}^4 + 2(B(n - 1)+1){(B(n-2) + 1)}^2 + \\(B(n-1) + 1)^2 - 1 & n > 2
+\end{cases}
+$$
 
 
 
