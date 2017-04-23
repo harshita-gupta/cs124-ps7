@@ -34,15 +34,15 @@ A recurrence starts to emerge, where IS(n) = IS(n-1) + IS(n-2), with base cases 
 Therefore, for n vertices in a line graph there are Fib(n + 1) independent sets.
 
 \subsubsection{Cycle Graph}
-Some small graphs: 
-C(0) = 1
-C(1) = 1 
-C(2) = 3
-C(3) = 4
-C(4) = 7
-C(5) = 1 + 5 + 5 = 11
-C(6) = 18
-This also reveals a fibonacci-like pattern with different base cases: C(0) = 1, C(1) = 1, C(2) = 3, and C(n) = C(n-1) + C(n-2) for n > 2. Therefore, for n vertices in a cyclical graph, there are C(n) independent sets as described below.
+Some small graphs: \\
+C(0) = 1\\
+C(1) = 1\\
+C(2) = 3\\
+C(3) = 4\\
+C(4) = 7\\
+C(5) = 11\\
+C(6) = 18\\
+This also reveals a fibonacci-like pattern with different base cases: $C(0) = 1$, $C(1) = 1$, $C(2) = 3$, and $C(n) = C(n-1) + C(n-2)$ for $n > 2$. Therefore, for n vertices in a cyclical graph, there are C(n) independent sets as described below.
 $$ C  = 
 \begin{cases}
 	1 & n = 0, n = 1\\
@@ -51,6 +51,11 @@ $$ C  =
 \end{cases} 
 $$
 \subsubsection{Complete Binary Tree}
+Add 1 for empty set. At each level $d$ of the binary tree (root is 0), there are $2^d$ nodes that can be combined in any combination (take a powerset) to achieve independent sets, since there are no vertices connecting them.
+Parents and children cannot be in the same set together, but all others can. For a given vertex $v$ at level $l$, depending on its level, we determine its number of siblings as $2^l - 1$, all of whom have children that can be included in a set with $v$. 
+Computing all the sets of a leaf: include or exclude itself from all the sets that came before it, doubling them, then also multiply by 2 for its sibling, and can't go in any set with its parents. 
+
+
 
 \subsubsection{Independent Sets on a Complete Binary Tree with 127 Nodes}
 
