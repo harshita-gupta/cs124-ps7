@@ -27,15 +27,31 @@ To generalize the MAXCUT randomized algorithm to MAX-$k$-CUT, we randomly assign
 
 The probability that a given edge crosses sets is 1 - the probability that both its vertices are in the same set, which is $1- k(\frac{1}{k}\cdot\frac{1}{k})= 1 - \frac{1}{k} = \frac{k-1}{k}$. This means that on average, a fraction of $\frac{k}{k-1}$ of the total edges will cross between sets. Since the most we could have is for all edges to cross between sets, this random assignment will be, on average, within a factor of $\frac{k-1}{k}$ of the optimum.
 
-For local search algorithms, we select an edge E and move 
+For local search algorithms, we start with a randomized solution. We then select a vertex in the first of the $k$ sets, $v$ in $S_1$, and check if moving it to a different set, $S_2$, would increase the number of edges across the cut. If this wouldn't increase the number of edges, we check if moving $v$ to $S_3$ would increase the edges crossing the cut, and so on, until $S_k$. The first increase that is found is the one that is made. We repeat this action for all vertices $v$ in each set, sequentially, and then start over, until the cut partition can no longer be improved by a single switch. We switch vertices at most |E| times, as shown in lecture notes. 
+
+We can count the edges in the cut in the following way: consider any vertex v $\in$ S1. For every vertex w in $S_2...S_k$ that it is connected to by an edge, we add 1/2 to a running sum. We do the same for each vertex in $S_2...S_k$. Note that each edge crossing the cut contributes 1 to the sum– 1/2 for each vertex of the edge.
+Hence the cut C satisfies
+\begin{multline*}
+	C= \frac{1}{2} (\sum_{v\in S_1}|\{w:(v,w)\in E, w \in S_2 \text{ or } S_3 \text{ or } ... \text{ or } S_k\}|+ \\
+	\sum_{v\in S_2}|\{w:(v,w) \in E, w \in S_1\text{ or } S_3 \text{ or } ... \text{ or } S_k\}| + \\
+	... + \\ 
+	\sum_{v\in S_k}|\{w:(v,w) \in E, w \in S_1\text{ or } S_2 \text{ or } ... \text{ or } S_{k-1}\}|)
+\end{multline*}
+
+Due to our usage of local search, at least $\frac{1}{k}$ of the edges from any vertex $v$ must lie in sets other than $v$, otherwise, we could move the set of $v$, and improve the cut. This implies that:
+\begin{multline*}
+	C \geq 
+\end{multline*}
+
+
 \section{Problem 3}
-Prove that if there exists a polynomial time algorithm for approximating the maximum clique in a graph to within a factor of 2, then there is a polynomial time algorithm for approximating the maximum clique in a graph to within a factor of $(1 + \epsilon)$ for any constant $\epsilon > 0$. The degree of the polynomial may depend on $\epsilon$. Hint: for a starting graph $G = (V,E)$, consider the graph $G \times G = (V′,E′)$, where the vertex set $V′$ of $G \times G$ is the set of ordered pairs $V′ = V \times V,$ and $\{(u,v),(w,x)\} \in E$′ if and only if
+Prove that if there exists a polynomial time algorithm for approximating the maximum clique in a graph to within a factor of 2, then there is a polynomial time algorithm for approximating the maximum clique in a graph to within a factor of $(1 + \epsilon)$ for any constant $\epsilon > 0$. The degree of the polynomial may depend on $\epsilon$. Hint: for a starting graph $G = (V,E)$, consider the graph $G \times G = (V \textquoteright ,E\textquoteright)$, where the vertex set $V\textquoteright$ of $G \times G$ is the set of ordered pairs $V\textquoteright = V \times V,$ and $\{(u,v),(w,x)\} \in E\textquoteright$′ if and only if
 
 \begin{equation}
 [\{(u,w)\}\in E \text{ or } u=w] \text{ and } [\{(v,x)\}\in E \text{ or } v=x].			
 \end{equation}
 
-If $G$ has a clique of size $k$, then how large a clique does $G′$ have?
+If $G$ has a clique of size $k$, then how large a clique does $G\textquoteright$ have?
 
 \subsection{Solution}
 
