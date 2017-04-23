@@ -33,36 +33,36 @@ We can count the edges in the cut in the following way: consider any vertex $v$ 
 Hence the cut C satisfies
 \begin{multline*}
 	C= \frac{1}{2} (\sum_{v\in S_1}|\{w:(v,w)\in E, w \in S_2 \text{ or } S_3 \text{ or } ... \text{ or } S_k\}|+ \\
-	\sum_{v\in S_2}|\{w:(v,w) \in E, w \in S_1\text{ or } S_3 \text{ or } ... \text{ or } S_k\}| + \\
-	... + \\ 
+	\sum_{v\in S_2}|\{w:(v,w) \in E, w \in S_1\text{ or } S_3 \text{ or } ... \text{ or } S_k\}| \\
+	+ ... + \\ 
 	\sum_{v\in S_k}|\{w:(v,w) \in E, w \in S_1\text{ or } S_2 \text{ or } ... \text{ or } S_{k-1}\}|)
 \end{multline*}
 
 Due to our usage of a terminating local search, at least $\frac{k-1}{k}$ of the edges from any vertex $v$ must lie in sets other than $v$, otherwise, we could move the set of $v$, and improve the cut. We know this via contradiction, since if less than $\frac{k-1}{k}$ of edges from $v$ crossed the sets, we would have  moved $v$ to another set. This implies, following from the math in lecture 20 notes:
-\begin{equation}
+\begin{equation*}
 	C \geq \frac{1}{2}(\sum_{v \in S_1} \delta(v)\frac{k-1}{k} + \sum_{v \in S_2} \delta(v)\frac{k-1}{k} + ... + \sum_{v \in S_K} \delta(v)\frac{k-1}{k})	
-\end{equation}
+\end{equation*}
 Combining the summations,
-\begin{equation}
+\begin{equation*}
 	C \geq \frac{1}{2}(\sum_{u \in V} \delta(u)\frac{k-1}{k})	
-\end{equation}
+\end{equation*}
 Therefore,
-\begin{equation}
+\begin{equation*}
 	C \geq \frac{k-1}{2k}\sum_{u \in V} \delta(u)
-\end{equation}
+\end{equation*}
 Since the sum of the degrees of all the vertices is twice the number of edges,
-\begin{equation}
+\begin{equation*}
 	C \geq \frac{k-1}{k}|E|
-\end{equation}
+\end{equation*}
 
 Since the most we could have is for all edges to cross between sets, the local search algorithm will yield an approximation, on average, within a factor of $\frac{k-1}{k}$ of the optimum.
 
 \section{Problem 3}
 Prove that if there exists a polynomial time algorithm for approximating the maximum clique in a graph to within a factor of 2, then there is a polynomial time algorithm for approximating the maximum clique in a graph to within a factor of $(1 + \epsilon)$ for any constant $\epsilon > 0$. The degree of the polynomial may depend on $\epsilon$. Hint: for a starting graph $G = (V,E)$, consider the graph $G \times G = (V \textquoteright ,E\textquoteright)$, where the vertex set $V\textquoteright$ of $G \times G$ is the set of ordered pairs $V\textquoteright = V \times V,$ and $\{(u,v),(w,x)\} \in E\textquoteright$′ if and only if
 
-\begin{equation}
+\begin{equation*}
 [\{(u,w)\}\in E \text{ or } u=w] \text{ and } [\{(v,x)\}\in E \text{ or } v=x].			
-\end{equation}
+\end{equation*}
 
 If $G$ has a clique of size $k$, then how large a clique does $G\textquoteright$ have?
 
@@ -75,9 +75,25 @@ If $G$ has a clique of size $k$, then how large a clique does $G\textquoteright$
 Prove that the local search algorithm always terminates in a stable state, and that the completion time is within a factor of 4/3 of the optimal.
 
 \subsection{Solution}
-Given that we have a set of jobs $j_1, j_2, j_3,..., j_n$, and two machines $M_1$ and $M_2$. We use local search to find an optimum assignment of jobs to $M_1$ or $M_2$. The solution space $S$ can be represented by an array of length $n$ that contains $1$ or $2$, where $S_i$ corresponds to the machine assignment of $j_i$. There are therefore $2^n$ solutions in the solution space. 
-	If for some job assignment, 
+Given that we have a set of jobs $j_1, j_2, j_3,..., j_n$, and two machines $M_1$ and $M_2$. We use local search to find an optimum assignment of jobs to $M_1$ or $M_2$. 
 	
-	Even for the best possible solution, the $makespan$ is at least as big as the biggest job, or at least as big as half the sum of the jobs. [From PSET3.]
+Even for the best possible solution, the optimal $makespan$ is at least as big as the biggest job, or at least as big as half the sum of the jobs. [From PSET3.] We consider both of these cases.
+	
+\textbf{Case 1: Optimal solution is at least as big as the biggest job $j_b$.}
+In this case, the optimal solution is to place the largest job on one machine and the other jobs on the second machine. With any initial assignment, say with $j_b$ initially placed in $M_1$, the algorithm would move all jobs $j_i$, $i!=b$ that are in $M_1$ to $M_2$, since this would reduce the $makespan$. Once all the jobs except $j_b$ are moved to $M_2$, the algorithm halts, and has also achieved the optimal solution. Therefore the algorithm terminates in a stable state and yields a completion time within the required factor of 4/3 of the optimal.
+
+\textbf{Case 2: Optimal solution is at least as big as half the sum of the jobs.}
+The best optimal solution, in this case, would be half the sum of the jobs if the jobs can be evenly split between each other. Let us represent the solution determined by local search in the following way: the load on $M_1$ is $l_1$ and the load on $M_2$ by $l_1 + x$, where $x$ is the offset between the load on $M_1$ and $M_2$. Since this is the termination state of the local search, we know that $x \leq l_1$, since if the opposite were true, the local search would not have terminated and would have moved an element from $M_2$ to $M_1$.
+
+The $makespan$, in this case, is $l_1 + x$, since that is the larger of the two machine loads. Using this representation, the optimal solution can be represented as $\frac{2 \cdot l_1 + x}{2}$. We prove that $l_1 + x \leq \frac{4}{3}\frac{2 \cdot l_1 + x}{2}$ by contradiction. If the converse were true, then:
+\begin{align*}
+	6 \cdot l_1 + 6 \cdot x > 8 \cdot l_1 + 4 \cdot x &\\
+	2\cdot x > 2 \cdot l_1 & \\
+	x > l_1 & \\
+\end{align*}
+However, we already established that $x \leq l_1$, and so we arrive at a contradiction, and prove that $l_1 + x \leq \frac{4}{3}\frac{2 \cdot l_1 + x}{2}$ is true. The completion time is within a factor of 4/3 of the optimal.
+
+Therefore, we have proved that the completion time for both possible cases is within 4/3 of the optimal.
+
 
 \end{document}
