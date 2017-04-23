@@ -91,9 +91,10 @@ The $makespan$, in this case, is $l_1 + x$, since that is the larger of the two 
 	2\cdot x > 2 \cdot l_1 & \\
 	x > l_1 & \\
 \end{align*}
-However, we already established that $x \leq l_1$, and so we arrive at a contradiction, and prove that $l_1 + x \leq \frac{4}{3}\frac{2 \cdot l_1 + x}{2}$ is true. The completion time is within a factor of 4/3 of the optimal.
+However, we already established that $x \leq l_1$, and so we arrive at a contradiction, and prove that $l_1 + x \leq \frac{4}{3}\frac{2 \cdot l_1 + x}{2}$ is true. The completion time for this case is within a factor of 4/3 of the optimal.
 
 Therefore, we have proved that the completion time for both possible cases is within 4/3 of the optimal.
 
+We know that the algorithm arrives at a stable solution no matter the case, since failure to arrive at a stable solution would mean that the $makespan$ was decreased infinitely, eventually becoming a negative number. This is impossible since runtimes, composed of sums of positive numbers (job values) cannot be negative.
 
 \end{document}
