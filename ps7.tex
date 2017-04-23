@@ -71,31 +71,37 @@ Notice, however, that every set in $S(K-1)$ that does not contain $v_{k-1}$ is e
 
 \subsubsection{Complete Binary Tree}
 
-
-	B(n) = B(n-1)^2 + B(n-2)^4
-	B(0) = 1 
-	B(1) = 2
-
-The proof for this formula also follows from induction. We know that the base case is true, since C(0) is the empty set = 1, and C(1) is also only the empty set since $v_1$ is connected to itself. C(2) is the empty set, as well as the sets containing each individual vertex = 3.
-
-Assuming that the values of C preceding it are correct, that is, that C(0) ... C(k - 2), C(k - 1) are all calculated correctly, the value of C(k) can be derived as follows. 
-
-
-
-Add 1 for empty set. At each level $d$ of the binary tree (root is 0), there are $2^d$ nodes that can be combined in any combination (take a powerset) to achieve independent sets, since there are no vertices connecting them.
-Parents and children cannot be in the same set together, but all others can. For a given vertex $v$ at level $l$, depending on its level, we determine its number of siblings as $2^l - 1$, all of whom have children that can be included in a set with $v$. 
-Computing all the sets of a leaf: include or exclude itself from all the sets that came before it, doubling them, then also multiply by 2 for its sibling, and can't go in any set with its parents. 
-
+Defining a formula B(n) that calculates the number of independent vertices in a complete binary tree with n levels.
 $$ B = 
 \begin{cases}
-	0 & n = 1, n = 2\\
-	{(B(n-2) + 1)}^4 + 2(B(n - 1)+1){(B(n-2) + 1)}^2 + \\(B(n-1) + 1)^2 - 1 & n > 2
+	1 & n = 0\\
+	2 & n = 1\\
+	B(n-1)^2 + B(n-2)^4 & n > 1
 \end{cases}
-$$
+$$ 
 
+The proof for this formula also follows from induction. We know that the base case is true, since B(0) is the empty set = 1, and B(1) is equal to the empty set and the set containing the root, which is the only vertex at the first level.
 
+Assuming that the values of C preceding it are correct, that is, that B(0) ... B(k - 2), B(k - 1) are all calculated correctly, the value of B(k) can be derived as follows. 
 
+The set of independent sets for k levels, $S(k)$ can be obtained by modifying a version of the independent sets for k - 1 levels, specifically by doing the following:\begin{enumerate}
+	\item Similar to the previous algorithms, we add all the new vertices added at step k to the independent sets of $S(k-2)$. Since, at this step, we are adding $2*{k-1}$ new vertices, all possible combinations of elements of the powerset of the new vertices can be added to each set in $S(k-2)$, yielding a $2^{2*{k-1}}\cdot S(k-2) = 4^{k-1}\cdot S(k-2)$ term.
+	\item For each of the independent sets in $S(k-1)$, we add the new vertices to sets that do not contain their parents. Since parent nodes will appear in 
+	\end{enumerate}
 \subsubsection{Independent Sets on a Complete Binary Tree with 127 Nodes}
+
+I calculated the number of independent sets on a complete binary tree with 127 nodes using the following code in Mathematica:
+\begin{displaymath}
+\text{RecurrenceTable}\left[\left\{a(n)=a(n-2)^4+a(n-1)^2,a(0)=1,a(1)=2\right\},a,\{n,1,7\}\right]
+\end{displaymath}
+
+Which yields the output, 
+\begin{displaymath}
+	\{2,5,41,2306,8143397,94592167328105,13345346031444632841427643906\}
+\end{displaymath}
+
+Therefore, for a binary tree with 127 nodes, there are 13345346031444632841427643906 independent sets.
+
 
 \section{Problem 2}
 Consider the problem MAX-$k$-CUT,which is like the MAXCUT algorithm, except that we divide the vertices into $k$ disjoint sets, and we want to maximize the number of edges between sets. Explain how to generalize both the randomized and the local search algorithms for MAX CUT to MAX-$k$-CUT and prove bounds on their performance.
@@ -144,7 +150,33 @@ Prove that if there exists a polynomial time algorithm for approximating the max
 If $G$ has a clique of size $k$, then how large a clique does $G\textquoteright$ have?
 
 \subsection{Solution}
+For $G\textquoteright = $ $G \times G$, $G\textquoteright$ has $k \times k$ vertices which are completely connected, as follows from the definition of $G\textquoteright$, that forms vertices from completely connected sub-vertices, and also follows from the fact that $G$ has $k$ vertices that are will always be connected (definition of clique). Therefore, the clique of $G\textquoteright$ is of size $k^2$.
 
+By the definition of $G\textquoteright$, we also know that if $G\textquoteright$ has a clique of $k^2$, $G$ has one of $k$. This is since for any vertex $(u, v)$ in $G\textquoteright$ there is a corresponding vertex $u$ and $v$ in $G$, and once repeats are discarded due to the property of vertex uniqueness, we have $k$ vertices. We know that these $k$ vertices are completely connected using the definition of edges for $G\textquoteright$.
+
+This logic can be generalized to greater products as well, like $G \times G \times G \times G$.
+
+To prove that there is a polynomial time algorithm for approximating the maximum clique in a graph to within a factor of $(1 + \epsilon)$, we take higher products of $G$ as described above, say the nth product, which requires multiplying $G$ by itself and multiplying the product by itself and repeating the process $n$ times, almost like repeated squaring from homework 1. This yields $G\textquoteright^n$, which, by the logic above, has a clique size of $k^{2n}$. We use the given polynomial time 2-approximation algorithms to obtain the max clique size between $k^{2n}$ and $\frac{k^{2n}}{2}$. We use this result to calculate the max clique size by taking the square root of the algorithm's output, which, in the worst case is $\sqrt[\leftroot{-3}\uproot{3}2n]{\frac{k^{2n}}{2}}$. As n approaches infinity, this value approaches k, which means that we can get closer to the actual maximum clique by taking higher-order products. 
+
+We use this finding to now find a relationship between epsilon and $n$, or the order of the product required to obtain the desired accuracy.
+
+\begin{equation*}
+	\sqrt[\leftroot{-3}\uproot{3}2n]{\frac{k^{2n}}{2}} = k(\epsilon + 1)
+\end{equation*}
+\begin{equation*}
+	k\sqrt[\leftroot{-3}\uproot{3}2n]{\frac{1}{2}} = k(\epsilon + 1)
+\end{equation*}
+\begin{equation*}
+	2^{-\frac{1}{2n}} = \epsilon + 1
+\end{equation*}
+Which, using mathematica, gives the formula for n 
+\begin{equation*}
+	n = \frac{1}{2 \left(\frac{\log \left(-\frac{1}{-1-e}\right)}{\log (2)}+\frac{2 i \pi  c_1}{\log (2)}\right)},c_1\in \mathbb{Z}
+\end{equation*}
+
+This method of computing the maximum clique is still in polynomial time since its various components are in polynomial time: computing n is a polynomial-time step, constructing the exponentiated product graph is also in polynomial time since n is a predetermined constant, and the 2-approximation algorithm is still polynomial. Taking the appropriate root of the result from the 2-approximation algorithm is also still polynomial. 
+
+We have therefore proved that there is a polynomial time algorithm for approximating the maximum clique in a graph to within a factor of $(1 + \epsilon)$.
 \section{Problem 4}
 We consider the following scheduling problem, similar to one that we studied before: we have two machines, and a set of jobs $j_1, j_2, j_3,..., j_n$ that we have to process. We place a subset of the jobs on each machine. Each job $j_i$ has an associated running time $r_i$. The load on the machine is the sum of the running times of the jobs placed on it. The goal is to minimize the completion time, sometimes called the $makespan$, which is the maximum load over all machines.
 Consider the following local search algorithm. Start with any arbitrary assignment of jobs to machines. We then repeatedly $swap$ a single job from one machine to another, if that swap will $strictly$ $reduce$ the completion time. (We won't make a move if the completion time stays the same, and only one job moves in each swap.) If a swap is not possible, we are in a stable state. For example, suppose we had jobs with running times 1, 2, 3, 4, and 5, and we started with the jobs with running times 1, 2, and 3 on machine 1, and the jobs with running times 4 and 5 on machine 2. This is a stable state, but it is not optimal; the minimum possible completion time is 8, and this stable state has completion time 9.
